@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import axios from "axios";
+import MenuSistema from '../../MenuSistema';
 
 export default function FormCliente() {
 
@@ -34,6 +35,7 @@ export default function FormCliente() {
     return (
 
         <div>
+            <MenuSistema tela={'cliente'} />
 
             <div style={{ marginTop: '3%' }}>
 
