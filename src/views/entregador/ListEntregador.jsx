@@ -8,7 +8,7 @@ export default function ListEntregador() {
 
     const [lista, setLista] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-   const [idRemover, setIdRemover] = useState();
+    const [idRemover, setIdRemover] = useState();
 
 
     useEffect(() => {
@@ -40,22 +40,22 @@ export default function ListEntregador() {
     async function remover() {
 
         await axios.delete('http://localhost:8080/api/entregador/' + idRemover)
-        .then((response) => {
-  
-            console.log('Entregador removido com sucesso.')
-  
-            axios.get("http://localhost:8080/api/entregador")
             .then((response) => {
-                setLista(response.data)
+
+                console.log('Entregador removido com sucesso.')
+
+                axios.get("http://localhost:8080/api/entregador")
+                    .then((response) => {
+                        setLista(response.data)
+                    })
             })
-        })
-        .catch((error) => {
-            console.log('Erro ao remover um entregador.')
-        })
+            .catch((error) => {
+                console.log('Erro ao remover um entregador.')
+            })
         setOpenModal(false)
     }
- 
- 
+
+
     return (
         <div>
             <MenuSistema tela={'entregador'} />
@@ -103,14 +103,16 @@ export default function ListEntregador() {
                                         <Table.Cell>{entregador.foneFixo}</Table.Cell>
                                         <Table.Cell textAlign='center'>
 
-                                            <Button
-                                                inverted
-                                                circular
-                                                color='green'
-                                                title='Clique aqui para editar os dados deste entregador'
-                                                icon>
-                                                <Icon name='edit' />
-                                            </Button> &nbsp;
+                                            <Link to="/form-entregador" state={{ id: entregador.id }} style={{ color: 'green' }}>
+                                                <Button
+                                                    inverted
+                                                    circular
+                                                    color='green'
+                                                    title='Clique aqui para editar os dados deste entregador'
+                                                    icon>
+                                                    <Icon name='edit' />
+                                                </Button> &nbsp;
+                                            </Link>
                                             <Button
                                                 inverted
                                                 circular
@@ -132,24 +134,24 @@ export default function ListEntregador() {
             </div>
 
             <Modal
-               basic
-               onClose={() => setOpenModal(false)}
-               onOpen={() => setOpenModal(true)}
-               open={openModal}
-         >
-               <Header icon>
-                   <Icon name='trash' />
-                   <div style={{marginTop: '5%'}}> Tem certeza que deseja remover esse registro? </div>
-               </Header>
-               <Modal.Actions>
-                   <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
-                       <Icon name='remove' /> Não
-                   </Button>
-                   <Button color='green' inverted onClick={() => remover()}>
-                       <Icon name='checkmark' /> Sim
-                   </Button>
-               </Modal.Actions>
-         </Modal>
+                basic
+                onClose={() => setOpenModal(false)}
+                onOpen={() => setOpenModal(true)}
+                open={openModal}
+            >
+                <Header icon>
+                    <Icon name='trash' />
+                    <div style={{ marginTop: '5%' }}> Tem certeza que deseja remover esse registro? </div>
+                </Header>
+                <Modal.Actions>
+                    <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
+                        <Icon name='remove' /> Não
+                    </Button>
+                    <Button color='green' inverted onClick={() => remover()}>
+                        <Icon name='checkmark' /> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
 
 
         </div>

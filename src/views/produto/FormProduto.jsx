@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
 export default function FormProduto() {
 
-	const [codigo, setCodigo] = useState();
-	const [titulo, setTitulo] = useState();
-	const [descricao, setDescricao] = useState();
-	const [valorUnitario, setValorUnitario] = useState();
-	const [tempoEntregaMinimo, setTempoEntregaMinimo] = useState();
-	const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState();
+    const [codigo, setCodigo] = useState();
+    const [titulo, setTitulo] = useState();
+    const [descricao, setDescricao] = useState();
+    const [valorUnitario, setValorUnitario] = useState();
+    const [tempoEntregaMinimo, setTempoEntregaMinimo] = useState();
+    const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState();
+    const { state } = useLocation();
+    const [idProduto, setIdProduto] = useState();
+
 
     const handleValueChange = (e) => {
         const value = e?.target?.value.replace(/\D/g, '');
@@ -36,14 +39,34 @@ export default function FormProduto() {
 
         // console.log(produtoRequest)
 
-        axios.post("http://localhost:8080/api/produto", produtoRequest)
-            .then((response) => {
-                console.log('Produto cadastrado com sucesso.')
-            })
-            .catch((error) => {
-                console.log('Erro ao incluir o um produto.')
-            })
+
+        if (idProduto != null) { //Alteração:
+            axios.put("http://localhost:8080/api/produto/" + idProduto, produtoRequest)
+                .then((response) => { console.log('produto alterado com sucesso.') })
+                .catch((error) => { console.log('Erro ao alter um produto.') })
+        } else { //Cadastro:
+            axios.post("http://localhost:8080/api/produto", produtoRequest)
+                .then((response) => { console.log('produto cadastrado com sucesso.') })
+                .catch((error) => { console.log('Erro ao incluir o produto.') })
+        }
+
     }
+
+    useEffect(() => {
+        if (state != null && state.id != null) {
+            axios.get("http://localhost:8080/api/produto/" + state.id)
+                .then((response) => {
+                    setIdProduto(response.data.id)
+                    setCodigo(response.data.codigo)
+                    setDescricao(response.data.descricao)
+                    setTempoEntregaMaximo(response.data.tempoEntregaMaximo)
+                    setTempoEntregaMinimo(response.data.tempoEntregaMinimo)
+                    setTitulo(response.data.titulo)
+                    setValorUnitario(response.data.valorUnitario)
+                })
+        }
+    }, [state])
+
 
     return (
 
@@ -54,7 +77,13 @@ export default function FormProduto() {
 
                 <Container textAlign='justified' >
 
-                    <h2> <span style={{ color: 'darkgray' }}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro </h2>
+                    {idProduto === undefined &&
+                        <h2> <span style={{ color: 'darkgray' }}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
+                    }
+                    {idProduto != undefined &&
+                        <h2> <span style={{ color: 'darkgray' }}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
+                    }
+
 
                     <Divider />
 
@@ -70,6 +99,7 @@ export default function FormProduto() {
                                     label='Título'
                                     maxLength="100"
                                     placeholder="Informe o título do produto"
+                                    value={titulo}
                                     onChange={e => setTitulo(e.target.value)}
                                 />
 
@@ -78,8 +108,9 @@ export default function FormProduto() {
                                     fluid
                                     placeholder="Informe o código do produto"
                                     label='Código do Produto'
+                                    value={codigo}
                                     onChange={e => setCodigo(e.target.value)}
-                                    />
+                                />
 
                             </Form.Group>
 
@@ -88,8 +119,9 @@ export default function FormProduto() {
                                     label='Descrição'
                                     placeholder="Informe a descrição do produto"
                                     width={16}
+                                    value={descricao}
                                     onChange={e => setDescricao(e.target.value)}
-                                    />
+                                />
                             </Form.Group>
 
                             <Form.Group>
@@ -101,7 +133,7 @@ export default function FormProduto() {
                                     onChange={handleValueChange}
                                     value={valorUnitario}
                                     width={6}
-                                    />
+                                />
 
                                 <Form.Input
                                     fluid
@@ -109,8 +141,9 @@ export default function FormProduto() {
                                     placeholder="30"
                                     type="number"
                                     width={6}
+                                    value={tempoEntregaMinimo}
                                     onChange={e => setTempoEntregaMinimo(e.target.value)}
-                                    />
+                                />
 
                                 <Form.Input
                                     fluid
@@ -118,8 +151,9 @@ export default function FormProduto() {
                                     placeholder="40"
                                     type="number"
                                     width={6}
+                                    value={tempoEntregaMaximo}
                                     onChange={e => setTempoEntregaMaximo(e.target.value)}
-                                    />
+                                />
 
                             </Form.Group>
 

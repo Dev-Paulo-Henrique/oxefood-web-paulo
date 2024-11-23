@@ -8,7 +8,7 @@ export default function ListProduto() {
 
     const [lista, setLista] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-   const [idRemover, setIdRemover] = useState();
+    const [idRemover, setIdRemover] = useState();
 
     useEffect(() => {
         carregarLista();
@@ -33,28 +33,28 @@ export default function ListProduto() {
     }
 
 
-   function confirmaRemover(id) {
-    setOpenModal(true)
-    setIdRemover(id)
-}
+    function confirmaRemover(id) {
+        setOpenModal(true)
+        setIdRemover(id)
+    }
 
-async function remover() {
+    async function remover() {
 
-    await axios.delete('http://localhost:8080/api/produto/' + idRemover)
-    .then((response) => {
+        await axios.delete('http://localhost:8080/api/produto/' + idRemover)
+            .then((response) => {
 
-        console.log('produto removido com sucesso.')
+                console.log('produto removido com sucesso.')
 
-        axios.get("http://localhost:8080/api/produto")
-        .then((response) => {
-            setLista(response.data)
-        })
-    })
-    .catch((error) => {
-        console.log('Erro ao remover um produto.')
-    })
-    setOpenModal(false)
-}
+                axios.get("http://localhost:8080/api/produto")
+                    .then((response) => {
+                        setLista(response.data)
+                    })
+            })
+            .catch((error) => {
+                console.log('Erro ao remover um produto.')
+            })
+        setOpenModal(false)
+    }
 
 
 
@@ -107,14 +107,16 @@ async function remover() {
                                         <Table.Cell>{produto.tempoEntregaMaximo}</Table.Cell>
                                         <Table.Cell textAlign='center'>
 
-                                            <Button
-                                                inverted
-                                                circular
-                                                color='green'
-                                                title='Clique aqui para editar os dados deste produto'
-                                                icon>
-                                                <Icon name='edit' />
-                                            </Button> &nbsp;
+                                            <Link to="/form-produto" state={{ id: produto.id }} style={{ color: 'green' }}>
+                                                <Button
+                                                    inverted
+                                                    circular
+                                                    color='green'
+                                                    title='Clique aqui para editar os dados deste produto'
+                                                    icon>
+                                                    <Icon name='edit' />
+                                                </Button> &nbsp;
+                                            </Link>
                                             <Button
                                                 inverted
                                                 circular
@@ -136,24 +138,24 @@ async function remover() {
             </div>
 
             <Modal
-               basic
-               onClose={() => setOpenModal(false)}
-               onOpen={() => setOpenModal(true)}
-               open={openModal}
-         >
-               <Header icon>
-                   <Icon name='trash' />
-                   <div style={{marginTop: '5%'}}> Tem certeza que deseja remover esse registro? </div>
-               </Header>
-               <Modal.Actions>
-                   <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
-                       <Icon name='remove' /> Não
-                   </Button>
-                   <Button color='green' inverted onClick={() => remover()}>
-                       <Icon name='checkmark' /> Sim
-                   </Button>
-               </Modal.Actions>
-         </Modal>
+                basic
+                onClose={() => setOpenModal(false)}
+                onOpen={() => setOpenModal(true)}
+                open={openModal}
+            >
+                <Header icon>
+                    <Icon name='trash' />
+                    <div style={{ marginTop: '5%' }}> Tem certeza que deseja remover esse registro? </div>
+                </Header>
+                <Modal.Actions>
+                    <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
+                        <Icon name='remove' /> Não
+                    </Button>
+                    <Button color='green' inverted onClick={() => remover()}>
+                        <Icon name='checkmark' /> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
 
 
         </div>
