@@ -108,6 +108,7 @@ export default function FormEntregador() {
                     setEnderecoRua(response.data.enderecoRua)
                     setEnderecoNumero(response.data.enderecoNumero)
                     setEnderecoCep(response.data.enderecoCep)
+                    setEnderecoCidade(response.data.enderecoCidade)
                     setEnderecoBairro(response.data.enderecoBairro)
                     // setEnderecoEstado(response.data.enderecoEstado)
                     setEnderecoComplemento(response.data.enderecoComplemento)
