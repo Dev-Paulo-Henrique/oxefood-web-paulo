@@ -96,10 +96,12 @@ export default function FormEntregador() {
         if (state != null && state.id != null) {
             axios.get("http://localhost:8080/api/entregador/" + state.id)
                 .then((response) => {
+                    const data = response.data.dataNascimento.split('-');
+                    const formattedNascimento = [data[2], data[1], data[0]].join("/")
+                    setDataNascimento(formattedNascimento)
                     setIdEntregador(response.data.id)
                     setNome(response.data.nome)
                     setCpf(response.data.cpf)
-                    setDataNascimento(response.data.dataNascimento)
                     setFoneCelular(response.data.foneCelular)
                     setFoneFixo(response.data.foneFixo)
                     setRg(response.data.rg)
