@@ -38,6 +38,22 @@ export default function MenuSistema(props) {
                     to='/list-entregador'
                 />
 
+                <Menu.Item
+                    content='Venda'
+                    active={props.tela === 'venda'}
+                    as={Link}
+                    // to='/form-venda'
+                    to='/list-venda'
+                />
+
+                <Menu.Item
+                    content='Categoria'
+                    active={props.tela === 'categoriaproduto'}
+                    as={Link}
+                    // to='/form-venda'
+                    to='/list-categoriaproduto'
+                />
+
             </Menu>
         </>
     )

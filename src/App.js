@@ -10,11 +10,6 @@ function App() {
   return (
     <div className="App">
       <Rotas />
-      
-      {/* <Home /> */}
-      {/* <FormCliente /> */}
-      {/* <FormProduto/> */}
-      {/* <FormEntregador/> */}
 
       <div style={{marginTop: '6%'}}>
         <Segment vertical color='grey' size='tiny' textAlign='center'>

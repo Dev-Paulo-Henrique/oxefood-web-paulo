@@ -32,12 +32,12 @@ export default function FormProduto() {
             codigo: codigo,
             titulo: titulo,
             descricao: descricao,
-            valorUnitario: valorUnitario,
+            valorUnitario: parseFloat(valorUnitario.replace("R$", "").replace(",", ".").trim()),
             tempoEntregaMinimo: tempoEntregaMinimo,
             tempoEntregaMaximo: tempoEntregaMaximo
         }
 
-        // console.log(produtoRequest)
+        console.log(produtoRequest)
 
 
         if (idProduto != null) { //Alteração:
