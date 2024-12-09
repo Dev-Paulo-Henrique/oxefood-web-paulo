@@ -40,7 +40,7 @@ export default function FormProduto() {
         console.log(produtoRequest)
 
 
-        if (idProduto != null) { //Alteração:
+        if (idProduto != null) {
             axios.put("http://localhost:8080/api/produto/" + idProduto, produtoRequest)
                 .then((response) => { console.log('produto alterado com sucesso.') })
                 .catch((error) => { console.log('Erro ao alter um produto.') })
