@@ -4,6 +4,7 @@ import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import axios from "axios";
 import MenuSistema from '../../MenuSistema';
 import { Link, useLocation } from "react-router-dom";
+import { notifyError, notifySuccess } from '../../views/util/Util';
 
 export default function FormCliente() {
 
@@ -14,6 +15,18 @@ export default function FormCliente() {
     const [foneFixo, setFoneFixo] = useState();
     const { state } = useLocation();
     const [idCliente, setIdCliente] = useState();
+    const [enderecos, setEnderecos] = useState([]);
+    const [listaEndereco, setListaEndereco] = useState([]);
+    const [novoEndereco, setNovoEndereco] = useState({
+        rua: '',
+        numero: '',
+        bairro: '',
+        cep: '',
+        cidade: '',
+        estado: '',
+        complemento: ''
+    });
+    // const [idCategoria, setIdCategoria] = useState();
 
 
     useEffect(() => {
@@ -28,13 +41,50 @@ export default function FormCliente() {
                     setCpf(response.data.cpf)
                     setFoneCelular(response.data.foneCelular)
                     setFoneFixo(response.data.foneFixo)
+                    setEnderecos(response.data.enderecos || [])
+                    setListaEndereco(response.data.enderecos)
                 })
         }
     }, [state])
 
+    function deletarEndereco(id) {
+        axios.delete("http://localhost:8080/api/cliente/endereco/" + id)
+            .then((response) => { notifySuccess('Endereço deletado com sucesso.') })
+            .catch((error) => {
+                if (error.response.data.errors != undefined) {
+                    for (let i = 0; i < error.response.data.errors.length; i++) {
+                        notifyError(error.response.data.errors[i].defaultMessage)
+                    }
+                } else {
+                    notifyError(error.response.data.message)
+                }
+            })
+            window.location.reload()
+        setListaEndereco([...enderecos]);
+    }
+
+    function adicionarEndereco() {
+        axios.post("http://localhost:8080/api/cliente/endereco/" + state.id, novoEndereco)
+            .then((response) => { notifySuccess('Endereço adicionado com sucesso.') })
+            .catch((error) => {
+                if (error.response.data.errors != undefined) {
+                    for (let i = 0; i < error.response.data.errors.length; i++) {
+                        notifyError(error.response.data.errors[i].defaultMessage)
+                    }
+                } else {
+                    notifyError(error.response.data.message)
+                }
+            })
+            window.location.reload()
+        setListaEndereco([...enderecos, novoEndereco]);
+    }
+
+
     function salvar() {
+        console.log([...enderecos, novoEndereco])
 
         let clienteRequest = {
+            enderecos: [...enderecos, novoEndereco],
             nome: nome,
             cpf: cpf,
             dataNascimento: dataNascimento,
@@ -50,8 +100,16 @@ export default function FormCliente() {
                 .catch((error) => { console.log('Erro ao alter um cliente.') })
         } else { //Cadastro:
             axios.post("http://localhost:8080/api/cliente", clienteRequest)
-                .then((response) => { console.log('Cliente cadastrado com sucesso.') })
-                .catch((error) => { console.log('Erro ao incluir o cliente.') })
+                .then((response) => { notifySuccess('Cliente cadastrado com sucesso.') })
+                .catch((error) => {
+                    if (error.response.data.errors != undefined) {
+                        for (let i = 0; i < error.response.data.errors.length; i++) {
+                            notifyError(error.response.data.errors[i].defaultMessage)
+                        }
+                    } else {
+                        notifyError(error.response.data.message)
+                    }
+                })
         }
 
     }
@@ -103,6 +161,89 @@ export default function FormCliente() {
                                 </Form.Input>
 
                             </Form.Group>
+
+                            {idCliente != undefined && (
+                                <>
+                                    <Form.Group widths='equal'>
+                                        {/* Campos para novo endereço */}
+                                        <Form.Input
+                                            fluid
+                                            label='Rua'
+                                            value={novoEndereco.rua}
+                                            onChange={e => setNovoEndereco({ ...novoEndereco, rua: e.target.value })}
+                                        />
+                                        <Form.Input
+                                            fluid
+                                            label='Número'
+                                            value={novoEndereco.numero}
+                                            onChange={e => setNovoEndereco({ ...novoEndereco, numero: e.target.value })}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group widths='equal'>
+                                        <Form.Input
+                                            fluid
+                                            label='Bairro'
+                                            value={novoEndereco.bairro}
+                                            onChange={e => setNovoEndereco({ ...novoEndereco, bairro: e.target.value })}
+                                        />
+                                        <Form.Input
+                                            fluid
+                                            label='CEP'
+                                            value={novoEndereco.cep}
+                                            onChange={e => setNovoEndereco({ ...novoEndereco, cep: e.target.value })}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group widths='equal'>
+                                        <Form.Input
+                                            fluid
+                                            label='Cidade'
+                                            value={novoEndereco.cidade}
+                                            onChange={e => setNovoEndereco({ ...novoEndereco, cidade: e.target.value })}
+                                        />
+                                        <Form.Input
+                                            fluid
+                                            label='Estado'
+                                            value={novoEndereco.estado}
+                                            onChange={e => setNovoEndereco({ ...novoEndereco, estado: e.target.value })}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group widths='equal'>
+                                        <Form.Input
+                                            fluid
+                                            label='Complemento'
+                                            value={novoEndereco.complemento}
+                                            onChange={e => setNovoEndereco({ ...novoEndereco, complemento: e.target.value })}
+                                        />
+                                    </Form.Group>
+                                    <Button onClick={adicionarEndereco} primary>Adicionar Endereço</Button>
+                                    <Divider />
+                                </>
+                            )}
+
+
+
+                            {listaEndereco.map((endereco, i) => {
+                                return (
+                                    <div key={i} style={{ border: '1px solid #ddd', padding: '10px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
+                                        <h3 style={{ margin: '0 0 10px 0', color: '#333' }}>Endereço {i + 1}</h3>
+                                        <ul style={{ listStyleType: 'none', paddingLeft: '0' }}>
+                                            <li><strong>ID:</strong> {endereco.id}</li>
+                                            <li><strong>Rua:</strong> {endereco.rua}</li>
+                                            <li><strong>Número:</strong> {endereco.numero}</li>
+                                            <li><strong>Bairro:</strong> {endereco.bairro}</li>
+                                            <li><strong>CEP:</strong> {endereco.cep}</li>
+                                            <li><strong>Cidade:</strong> {endereco.cidade}</li>
+                                            <li><strong>Estado:</strong> {endereco.estado}</li>
+                                            <li><strong>Complemento:</strong> {endereco.complemento}</li>
+                                        </ul>
+                                        <button onClick={() => deletarEndereco(endereco.id)}>Deletar</button>
+                                    </div>
+                                );
+                            })}
+
 
                             <Form.Group>
 

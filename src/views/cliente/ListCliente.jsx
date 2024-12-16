@@ -84,6 +84,7 @@ export default function ListCliente() {
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Nome</Table.HeaderCell>
+                                    <Table.HeaderCell>Endereço</Table.HeaderCell>
                                     <Table.HeaderCell>CPF</Table.HeaderCell>
                                     <Table.HeaderCell>Data de Nascimento</Table.HeaderCell>
                                     <Table.HeaderCell>Fone Celular</Table.HeaderCell>
@@ -98,6 +99,7 @@ export default function ListCliente() {
 
                                     <Table.Row key={cliente.id}>
                                         <Table.Cell>{cliente.nome}</Table.Cell>
+                                        <Table.Cell>{cliente.enderecos.length > 0 ? `${cliente.enderecos.length} endereços` : "Vazio"}</Table.Cell>
                                         <Table.Cell>{cliente.cpf}</Table.Cell>
                                         <Table.Cell>{formatarData(cliente.dataNascimento)}</Table.Cell>
                                         <Table.Cell>{cliente.foneCelular}</Table.Cell>
