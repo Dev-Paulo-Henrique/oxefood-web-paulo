@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 
+import { logout } from './views/util/AuthenticationService';
+
 export default function MenuSistema(props) {
 
     return (
@@ -12,21 +14,19 @@ export default function MenuSistema(props) {
                     content='Home'
                     active={props.tela === 'home'}
                     as={Link}
-                    to='/'
+                    to='/home'
                 />
 
                 <Menu.Item
                     content='Cliente'
                     active={props.tela === 'cliente'}
                     as={Link}
-                    //    to='/form-cliente'
                     to='/list-cliente'
                 />
                 <Menu.Item
                     content='Produto'
                     active={props.tela === 'produto'}
                     as={Link}
-                    // to='/form-produto'
                     to='/list-produto'
                 />
 
@@ -34,7 +34,6 @@ export default function MenuSistema(props) {
                     content='Entregador'
                     active={props.tela === 'entregador'}
                     as={Link}
-                    // to='/form-entregador'
                     to='/list-entregador'
                 />
 
@@ -42,7 +41,6 @@ export default function MenuSistema(props) {
                     content='Venda'
                     active={props.tela === 'venda'}
                     as={Link}
-                    // to='/form-venda'
                     to='/list-venda'
                 />
 
@@ -50,8 +48,15 @@ export default function MenuSistema(props) {
                     content='Categoria'
                     active={props.tela === 'categoriaproduto'}
                     as={Link}
-                    // to='/form-venda'
                     to='/list-categoriaproduto'
+                />
+
+                <Menu.Item
+                    className='navbar__item--mobile'
+                    onClick={logout}
+                    content='Sair'
+                    as={Link}
+                    to='/'
                 />
 
             </Menu>
