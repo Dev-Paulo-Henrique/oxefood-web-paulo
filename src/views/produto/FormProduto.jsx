@@ -41,7 +41,7 @@ export default function FormProduto() {
             tempoEntregaMaximo: tempoEntregaMaximo
         }
 
-        // console.log(produtoRequest)
+        console.log(produtoRequest)
 
 
         if (idProduto != null) {
