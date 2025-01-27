@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import InputMask from 'react-input-mask';
+// import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 import { Link, useLocation } from "react-router-dom";

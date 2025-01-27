@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Divider, Icon, Table, Modal, Header } from 'semantic-ui-react';
+import { Button, Container, Divider, Icon, Table, Modal, Header, Menu, Form, Segment } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 
 export default function ListProduto() {
@@ -15,10 +15,6 @@ export default function ListProduto() {
     const [idCategoria, setIdCategoria] = useState();
     const [listaCategoriaProduto, setListaCategoriaProduto] = useState([]);
 
-
-    useEffect(() => {
-        carregarLista();
-    }, [])
 
     function carregarLista() {
 
@@ -42,6 +38,10 @@ export default function ListProduto() {
             })
 
     }
+
+    useEffect(() => {
+        carregarLista();
+    }, [])
 
 
     function confirmaRemover(id) {
@@ -111,7 +111,7 @@ export default function ListProduto() {
 
         await axios.post("http://localhost:8080/api/produto/filtrar", formData)
             .then((response) => {
-                setListaProdutos(response.data)
+                setLista(response.data)
             })
     }
 

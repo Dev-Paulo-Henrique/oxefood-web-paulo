@@ -53,6 +53,7 @@ export default function MenuSistema(props) {
 
                 <Menu.Item
                     className='navbar__item--mobile'
+                    position="right"
                     onClick={logout}
                     content='Sair'
                     as={Link}
